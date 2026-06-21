@@ -1,0 +1,27 @@
+name: Automatic SuperEnalotto Sync
+
+on:
+  schedule:
+    - cron: '30 21 * * 2,4,5,6' # Gira alle 22:30/23:30 italiane nei giorni di estrazione
+  workflow_dispatch: # Permette l'avvio manuale da sito
+
+jobs:
+  sync-database:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Controlla codice
+      uses: actions/checkout@v3
+
+    - name: Configura Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+
+    - name: Installa dipendenze
+      run: pip install -r scripts/requirements.txt
+
+    - name: Esegui Sync
+      env:
+        SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+        SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+      run: python scripts/sync_data.py
