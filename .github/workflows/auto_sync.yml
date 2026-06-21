@@ -1,9 +1,13 @@
 name: Automatic SuperEnalotto Sync
 
 on:
+  push:
+    branches:
+      - master
+      - main
+  workflow_dispatch:
   schedule:
-    - cron: '30 21 * * 2,4,5,6' # Gira alle 22:30/23:30 italiane nei giorni di estrazione
-  workflow_dispatch: # Permette l'avvio manuale da sito
+    - cron: '0 22 * * *'
 
 jobs:
   sync-database:
